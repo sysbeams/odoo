@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+  web:
+    image: odoo-app
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+    env_file:
+      - ./.env
+  db:
+    image: postgres:13
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - ./.env
+volumes:
+  odoo-web-data:
+  odoo-db-data:
