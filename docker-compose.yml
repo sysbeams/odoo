@@ -6,7 +6,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8069:8069"
+      - "8080:8080"
   db:
     image: postgres:13
     env_file:
