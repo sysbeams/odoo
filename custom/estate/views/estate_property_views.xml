@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="estate_properties_action" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">estate.property</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_noContent_smiling_face">
+                Create your property Advertisement !
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_estate_properties"
+        name="Properties"
+        parent="estate_menu_advertisement"
+        action="estate_properties_action"
+        sequence="1"/>
+
+</odoo>

@@ -2,19 +2,17 @@ from odoo import fields, models
 
 
 class EstateProperty(models.Model):
-    _name = "estate_property"
-    _description = "Tabel for property records"
+    _name = "estate.property"
+    _description = "Estate Properties definition"
 
-    name = fields.Char('Plan name', required=True)
-    description = fields.Text('Property description', required=True)
-    postcode = fields.Char('Property Postcode', required=True)
-    date_availability = fields.Date()
-    expected_price = fields.Float()
-    selling_price = fields.Float()
-    bedrooms = fields.Integer()
-    living_area = fields.Integer()
-    facades = fields.Integer()
-    garage = fields.Boolean()
-    garden = fields.Boolean()
-    garden_area = fields.Integer()
-    garden_orientation = fields.Selection(selection=[("Good", "Good"), ("Bad", "Bad")])
+    name = fields.Char('Estate Name', required=True, translate=True)
+    description = fields.Text('Estate description', required=True)
+    location = fields.Char('Geo Location', required=True)
+    postcode = fields.Char('Postal Address')
+    date_availability = fields.Date('Available date', required=True)
+    expected_price = fields.Float('Price', required=True)
+    selling_price = fields.Float('Selling Price', required=True)
+    bedrooms = fields.Integer('Number of bedrooms', required=True)
+    living_area = fields.Integer('Number of living room', required=True)
+    owner = fields.Char('Owner name', required=True)
+    active = fields.Boolean('Active', default=True)

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="estate_menu_root"
+        name="Real Estate"
+        web_icon="static/description/icon.png"
+        sequence="0"/>
+
+    <!-- Advertisement (MAIN USER MENU) -->
+    <menuitem
+        id="estate_menu_advertisement"
+        name="Advertisement"
+        parent="estate_menu_root"
+        sequence="1"/>
+
+</odoo>

@@ -1,13 +1,16 @@
 {
-    'name': 'Estate',
-    'version': '1.2',
-    'category': 'Sales/CRM',
-    'sequence': 15,
-    'summary': 'Advertise Estate',
-    'description': "",
-    'website': 'https://www.odoo.com/page/crm',
+    'name': 'ESTATE MANAGEMENT',
+    'author': 'Sysbeams',
+    'depends': [
+        'base_setup'
+    ],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/estate_menus.xml',
+        'views/estate_property_views.xml',
+
+    ],
     'installable': True,
     'application': True,
-    'auto_install': False
-
+    'license': 'LGPL-3',
 }
