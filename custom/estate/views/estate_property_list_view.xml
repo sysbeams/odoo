@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-      <record id="estate_property_view_search" model="ir.ui.view">
+    <record id="estate_property_view_search" model="ir.ui.view">
         <field name="name">estate.property.view.search</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <search string="Search Properties">
                 <field name="name"/>
-                <field name="owner"/>
+                <field name="type_id"/>
                 <field name="state"/>
                 <field name="postcode"/>
-                <filter string="Include archived" name="archived" domain="['|', ('active', '=', True), ('active', '=', False)]"/>
+                <filter string="Include archived" name="archived"
+                        domain="['|', ('active', '=', True), ('active', '=', False)]"/>
                 <separator/>
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
                 <group expand="1" string="Group By">
-                        <filter string="state" name="state" context="{'group_by':'state', 'new':True, 'offer received':True}"/>
-                    </group>
+                    <filter string="state" name="state"
+                            context="{'group_by':'state', 'new':True, 'offer received':True}"/>
+                </group>
             </search>
         </field>
     </record>
@@ -24,24 +26,63 @@
         <field name="arch" type="xml">
             <form string="Properties">
                 <sheet>
+                    <h1>
+                        <field name="type_id"/>
+                    </h1>
+                    <h3>
+                        <field name="tag_ids" widget="many2many_tags"/>
+                    </h3>
                     <group>
-                        <group><field name="name"/></group>
-                        <group><field name="state"/></group>
+
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                        </group>
                         <div>
-                            <group><field name="postcode"/> </group>
-                             <group><field name="date_availability"/> </group>
+                            <group>
+                                <field name="postcode"/>
+                            </group>
+                            <group>
+                                <field name="date_availability"/>
+                            </group>
 
                         </div>
                         <div>
-                            <group><field name="expected_price"/> </group>
-                            <group><field name="selling_price"/> </group>
+                            <group>
+                                <field name="expected_price"/>
+                            </group>
+                            <group>
+                                <field name="selling_price"/>
+                            </group>
                         </div>
                         <notebook>
                             <page string="Description">
-                                <group><field name="description"/></group>
-                                <group><field name="bedrooms"/></group>
-                                <group><field name="living_area"/></group>
-                                <group><field name="owner"/></group>
+                                <group>
+                                    <field name="description"/>
+                                </group>
+                                <group>
+                                    <field name="bedrooms"/>
+                                </group>
+                                <group>
+                                    <field name="living_area"/>
+                                </group>
+                            </page>
+                            <page string="Offers">
+
+                                <field name="offer_ids"/>
+
+
+                            </page>
+                            <page string="Other Info">
+                                <group>
+                                    <field name="buyer_id"/>
+                                </group>
+                                <group>
+                                    <field name="seller_id"/>
+                                </group>
+
                             </page>
                         </notebook>
                     </group>
@@ -53,7 +94,7 @@
         <field name="name">Properties</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <tree string="Channel" >
+            <tree string="Channel">
                 <field name="name"/>
                 <field name="postcode"/>
                 <field name="bedrooms"/>
@@ -61,6 +102,7 @@
                 <field name="expected_price"/>
                 <field name="selling_price"/>
                 <field name="date_availability"/>
+                <field name="type_id"/>
             </tree>
         </field>
     </record>
