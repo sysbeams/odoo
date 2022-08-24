@@ -13,6 +13,7 @@
         </field>
     </record>
 
+
     <menuitem
         id="menu_estate_properties"
         name="Properties"

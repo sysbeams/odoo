@@ -1,6 +1,7 @@
 {
     'name': 'ESTATE MANAGEMENT',
     'author': 'Sysbeams',
+    'sequence': -100,
     'depends': [
         'base_setup'
     ],
@@ -8,6 +9,7 @@
         'security/ir.model.access.csv',
         'views/estate_menus.xml',
         'views/estate_property_views.xml',
+        'views/estate_property_list_view.xml'
 
     ],
     'installable': True,
