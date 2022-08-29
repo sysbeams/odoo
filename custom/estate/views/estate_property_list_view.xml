@@ -9,10 +9,11 @@
                 <field name="type_id"/>
                 <field name="state"/>
                 <field name="postcode"/>
-                <filter string="Include archived" name="archived"
-                        domain="['|', ('active', '=', True), ('active', '=', False)]"/>
+                <field name="description" string="Name and description"
+                       filter_domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]"/>
+                <field name="living_area" string="Greater or Equal Living Area"
+                       filter_domain="['|', ('living_area', '=', self), ('living_area', '>', self)]"/>
                 <separator/>
-                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
                 <group expand="1" string="Group By">
                     <filter string="state" name="state"
                             context="{'group_by':'state', 'new':True, 'offer received':True}"/>
@@ -28,14 +29,19 @@
 
                 <sheet>
                     <header>
-                        <button name="action_sold" type="object" string="Sold"/>
-                        <button name="action_cancel" type="object" string="Cancel"/>
+                        <button name="action_sold" type="object" string="Sold" class="oe_highlight"
+                                states="new,offer received,offer accepted"/>
+                        <button name="action_cancel" type="object" string="Cancel" class="oe_highlight"
+                                states="new,offer received,offer accepted"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="new,offer received,offer accepted,sold"/>
                     </header>
                     <h1>
-                        <field name="type_id"/>
+                        <field name="type_id" options="{'no_create': True, 'no_open': True}"
+                               attrs="{'readonly': [('state', '=', 'sold')]}"/>
                     </h1>
                     <h3>
-                        <field name="tag_ids" widget="many2many_tags"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                     </h3>
                     <group>
                         <group>
@@ -57,7 +63,7 @@
                         </div>
                         <div>
                             <group>
-                                <field name="expected_price"/>
+                                <field name="expected_price" attrs="{'readonly': [('state', '=', 'sold')]}"/>
                             </group>
                             <group>
                                 <field name="selling_price"/>
@@ -84,25 +90,28 @@
                                     <field name="garden"/>
                                 </group>
                                 <group>
-                                    <field name="garden_area"/>
+                                    <field name="garden_area" attrs="{'invisible': [('garden', '=', False)]}"/>
                                 </group>
                                 <group>
-                                    <field name="garden_orientation"/>
+                                    <field name="garden_orientation" attrs="{'invisible': [('garden', '=', False)]}"/>
                                 </group>
                                 <group>
                                     <field name="total_area"/>
                                 </group>
                             </page>
-                            <page string="Offers">
-                                <field name="offer_ids">
-                                    <tree string="Channel">
+                            <page string="Offers" id="action_offer_lists">
+                                <field name="offer_ids" attrs="{'readonly': ['|', ('state', '=', 'offer accepted'),
+                                ('state', '=', 'sold')]}">
+                                    <tree string="Channel" default_order="price desc" editable="bottom"
+                                          decoration-success="status=='accepted'" decoration-danger="status=='refused'">
                                         <field name="price"/>
                                         <field name="buyer_id"/>
-                                        <field name="status"/>
+                                        <field name="status" optional="hide"/>
                                         <field name="validity"/>
                                         <button name="action_accept" type="object" class="fa fa-check btn-success"
-                                                enabled=""/>
-                                        <button name="action_refuse" type="object" class="fa fa-times btn-danger"/>
+                                                attrs="{'invisible': [('status', '!=', 'new')]}"/>
+                                        <button name="action_refuse" type="object" class="fa fa-times btn-danger"
+                                                attrs="{'invisible': [('status', '!=', 'new')]}"/>
 
                                     </tree>
                                     <form string="Offers">
@@ -136,15 +145,18 @@
         <field name="name">Properties</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <tree string="Channel">
+            <tree string="Channel" default_order="id desc" decoration-success="state=='offer received'"
+                  decoration-bf="state=='offer accepted'" decoration-muted="state=='sold'">
                 <field name="name"/>
+                <field name="type_id"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                 <field name="postcode"/>
                 <field name="bedrooms"/>
                 <field name="living_area"/>
                 <field name="expected_price"/>
                 <field name="selling_price"/>
-                <field name="date_availability"/>
-                <field name="type_id"/>
+                <field name="date_availability" optional="hide"/>
+                <field name="state" optional="hide"/>
             </tree>
         </field>
     </record>

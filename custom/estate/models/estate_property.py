@@ -7,6 +7,7 @@ from odoo.exceptions import ValidationError, UserError
 class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "Estate Properties definition"
+    _order = "id desc"
 
     name = fields.Char('Title', required=True, translate=True)
     description = fields.Text('Estate description')
@@ -48,10 +49,13 @@ class EstateProperty(models.Model):
     @api.depends('offer_ids')
     def _compute_best_offer(self):
         record_offers = self.mapped("offer_ids")
-        prices = []
-        for record_offer in record_offers:
-            prices.append(record_offer.price)
-        self.best_offer = max(prices)
+        if len(record_offers):
+            prices = []
+            for record_offer in record_offers:
+                prices.append(record_offer.price)
+                self.best_offer = max(prices)
+        else:
+            self.best_offer = 0
 
     @api.constrains('selling_price')
     def check_price(self):
@@ -73,6 +77,11 @@ class EstateProperty(models.Model):
         for record in self:
             if record.state != 'canceled':
                 record.state = 'sold'
+                record_offers = self.mapped("offer_ids")
+                if record_offers is not None:
+                    for record_offer in record_offers:
+                        if record_offer.status != 'accepted':
+                            record_offer.status = 'refused'
             else:
                 raise UserError('This property is canceled! it cannot be sold')
         return True

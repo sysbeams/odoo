@@ -7,9 +7,11 @@ from odoo.exceptions import UserError
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "Estate Properties Offers"
+    _order = "price desc"
 
     price = fields.Float('Price')
     property_id = fields.Many2one('estate.property', string='Property')
+    property_type_id = fields.Many2one(related='property_id.type_id', string='Property Type', store=True)
     buyer_id = fields.Many2one('res.partner', string='Partner')
     active = fields.Boolean('Active', default=True)
     status = fields.Selection(
@@ -41,19 +43,16 @@ class EstatePropertyOffer(models.Model):
     def action_accept(self):
         for offer in self:
             property_sold = offer.mapped('property_id')
-            if offer.status != 'accepted':
+            if property_sold.state != 'sold':
                 property_sold.buyer_id = self.buyer_id
                 property_sold.selling_price = self.price
                 property_sold.state = 'offer accepted'
                 offer.status = 'accepted'
             else:
-                raise UserError('Offer already accepted')
+                raise UserError('Property sold')
         return True
 
     def action_refuse(self):
         for offer in self:
-            if offer.status != 'accepted':
-                offer.status = 'refused'
-            else:
-                raise UserError('Offer already accepted')
+            offer.status = 'refused'
         return True

@@ -8,18 +8,10 @@
                 <sheet>
                     <group>
 
-                        <group>
-                            <field name="price"/>
-                        </group>
-                        <group>
-                            <field name="buyer_id"/>
-                        </group>
-                        <group>
-                            <field name="status"/>
-                        </group>
-                        <group>
-                            <field name="validity"/>
-                        </group>
+                        <field name="price"/>
+                        <field name="buyer_id"/>
+                        <field name="status"/>
+                        <field name="validity"/>
                         <!--                        <group>-->
                         <!--                            <field name="date_deadline"/>-->
                         <!--                        </group>-->
@@ -33,7 +25,21 @@
         <field name="name">Offers</field>
         <field name="model">estate.property.offer</field>
         <field name="arch" type="xml">
+            <tree string="Channel" default_order="price desc" editable="bottom"
+                  decoration-success="status=='accepted'"
+                  decoration-danger="status=='refused'">
+                <field name="price"/>
+                <field name="buyer_id"/>
+                <field name="status" optional="hide"/>
+                <field name="validity"/>
+                <button name="action_accept" type="object"
+                        class="fa fa-check btn-success"
+                        attrs="{'invisible': [('status', '!=', 'new')]}"/>
+                <button name="action_refuse" type="object"
+                        class="fa fa-times btn-danger"
+                        attrs="{'invisible': [('status', '!=', 'new')]}"/>
 
+            </tree>
         </field>
     </record>
 </odoo>
