@@ -34,7 +34,7 @@
                         <button name="action_cancel" type="object" string="Cancel" class="oe_highlight"
                                 states="new,offer received,offer accepted"/>
                         <field name="state" widget="statusbar"
-                               statusbar_visible="new,offer received,offer accepted,sold"/>
+                               />
                     </header>
                     <h1>
                         <field name="type_id" options="{'no_create': True, 'no_open': True}"

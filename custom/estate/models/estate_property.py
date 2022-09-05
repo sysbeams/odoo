@@ -41,6 +41,13 @@ class EstateProperty(models.Model):
          'The Property Selling Price must be a positive value')
     ]
 
+    @api.ondelete(at_uninstall=False)
+    def check_property_state(self):
+        for record in self:
+            if (record.state != 'new') and (record.state != 'canceled'):
+                print(record.state)
+                raise UserError('This property cannot be deleted')
+
     @api.depends('living_area', 'garden_area')
     def _compute_total_area(self):
         for record in self:
@@ -49,19 +56,30 @@ class EstateProperty(models.Model):
     @api.depends('offer_ids')
     def _compute_best_offer(self):
         record_offers = self.mapped("offer_ids")
-        if len(record_offers):
+        self.best_offer = self.compute_best_price_from_offers(record_offers)
+
+    def compute_best_price_from_offers(self, offers):
+        best_price = 0
+        if len(offers):
             prices = []
-            for record_offer in record_offers:
+            for record_offer in offers:
                 prices.append(record_offer.price)
-                self.best_offer = max(prices)
-        else:
-            self.best_offer = 0
+                best_price = max(prices)
+        return best_price
+
+    def update_property_state(self, property_id, state):
+        print(property_id)
+        property_offered = self.env['estate.property'].search([
+            ('id', '=', property_id)
+        ])
+        print(property_offered)
+        property_offered.write({'state': state})
 
     @api.constrains('selling_price')
     def check_price(self):
         for record in self:
-            if record.selling_price < (0.09 * record.expected_price) and (record.state == 'offer received'
-                                                                          or record.state == 'offer accepted'):
+            if record.selling_price < (0.09 * record.expected_price) and (record.state == 'offer accepted'):
+
                 raise ValidationError('selling price cannot be lower than 90% of the expected price.')
 
     @api.onchange("garden")
@@ -88,7 +106,7 @@ class EstateProperty(models.Model):
 
     def action_cancel(self):
         for record in self:
-            if record.state != 'sold':
+            if record.state != 'sold' and record.state != 'offer accepted':
                 record.state = 'canceled'
             else:
                 raise UserError('This property is sold! it cannot be canceled')

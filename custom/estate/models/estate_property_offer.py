@@ -40,6 +40,21 @@ class EstatePropertyOffer(models.Model):
     #         date = datetime.timedelta(days=offer.validity)
     #         offer.date_deadline = today + date
 
+    @api.model
+    def create(self, vals_list):
+        property_sold = self.env['estate.property'].browse(vals_list['property_id'])
+        if self.check_property_state(property_sold, vals_list['price']):
+            property_sold.update_property_state(property_sold.id, 'offer received')
+        return super(EstatePropertyOffer, self).create(vals_list)
+
+    def check_property_state(self, property_sold, offer_price):
+        if property_sold.state == 'offer received':
+            if property_sold.best_offer > offer_price:
+                raise UserError('offer bid lower than previous bid')
+            else:
+                return True
+        return True
+
     def action_accept(self):
         for offer in self:
             property_sold = offer.mapped('property_id')
