@@ -14,6 +14,7 @@
         'views/estate_property_list_view.xml',
         'views/estate_property_type_list_view.xml',
         'views/estate_property_offer_list_view.xml',
+        'views/res_users_views.xml'
 
     ],
     'installable': True,
