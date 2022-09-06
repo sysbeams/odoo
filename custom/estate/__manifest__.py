@@ -1,12 +1,14 @@
 {
     'name': 'ESTATE MANAGEMENT',
     'author': 'Sysbeams',
+    'category': 'Real Estate Brokerage',
     'sequence': -100,
     'depends': [
         'base_setup'
     ],
     'data': [
         'security/ir.model.access.csv',
+        'security/estate_security.xml',
         'views/estate_menus.xml',
         'views/estate_property_views.xml',
         'views/estate_property_type_views.xml',
