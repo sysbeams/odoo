@@ -1,4 +1,3 @@
-
 from odoo import fields, models, api, _
 
 
@@ -6,17 +5,15 @@ class EstatePropertyType(models.Model):
     _name = "estate.property.type"
     _description = "Estate Properties Type"
     _order = "name"
+    _sql_constraints = [
+        ('check_type', 'UNIQUE(name)', 'Type name must be unique'),
+    ]
 
     name = fields.Char('Title')
     property_ids = fields.One2many('estate.property', 'type_id')
     offer_ids = fields.One2many('estate.property.offer', 'property_type_id', string='Offers')
     offer_counts = fields.Integer('Offer Counts', compute='_compute_offer_counts')
-    sequence = fields.Integer('Sequence', default=1)
-
-    _sql_constraints = [
-        ('check_type', 'UNIQUE(name)',
-         'Type name must be unique'),
-    ]
+    sequence = fields.Integer('Sequence', default=10)
 
     @api.depends('offer_ids')
     def _compute_offer_counts(self):

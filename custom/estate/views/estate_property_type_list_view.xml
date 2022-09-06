@@ -20,21 +20,22 @@
                             <field string="Offers" name="offer_counts" widget="statinfo"/>
                         </button>
                     </div>
-
-                    <group>
-                        <group>
-                            <h1>
-                                <field name="name"/>
-                            </h1>
-                            <field name="property_ids">
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page string="Properties">
+                            <field name="property_ids" readonly="1">
                                 <tree>
                                     <field name="name"/>
                                     <field name="expected_price"/>
                                     <field name="state"/>
                                 </tree>
                             </field>
-                        </group>
-                    </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -43,7 +44,7 @@
         <field name="name">Properties Type</field>
         <field name="model">estate.property.type</field>
         <field name="arch" type="xml">
-            <tree string="Channel" default_order="name desc">
+            <tree string="Property Types" default_order="name desc">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
 
