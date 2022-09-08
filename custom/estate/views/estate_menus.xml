@@ -26,7 +26,8 @@
             id="estate_menu_settings"
             name="Settings"
             parent="estate_menu_root"
-            sequence="2"/>
+            sequence="2"
+            groups="estate_group_manager"/>
 
     <menuitem
             id="menu_estate_property_type"
@@ -41,5 +42,7 @@
             parent="estate_menu_settings"
             action="estate_property_tag_action"
             sequence="4"/>
+
+    <menuitem id="estate.menu_estate_report" name="Reporting" parent="estate_menu_root"/>
 
 </odoo>

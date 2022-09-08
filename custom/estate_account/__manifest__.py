@@ -7,7 +7,7 @@
         'account'
     ],
     'data': [
-        # 'security/ir.model.access.csv',
+        "report/estate_reports.xml",
 
     ],
     "auto_install": True,

@@ -1,5 +1,4 @@
 from dateutil.relativedelta import relativedelta
-from docutils.parsers import null
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError, UserError
@@ -32,10 +31,12 @@ class EstateProperty(models.Model):
     garden_orientation = fields.Selection([('north', 'North'), ('south', 'South'), ('east', 'East'), ('west', 'West')])
     seller_id = fields.Many2one('res.users', string='Seller', default=lambda self: self.env.user)
     buyer_id = fields.Many2one('res.partner', string='Partner')
+    company_id = fields.Many2one('res.company', string='Company', required=True, readonly=True,
+                                 default=lambda self: self.env.company)
     active = fields.Boolean('Active', default=True)
     state = fields.Selection(
         [('new', 'New'), ('offer received', 'Offer received'), ('offer accepted', 'Offer Accepted'),
-         ('sold', 'Sold'), ('canceled', 'Canceled')], required=True, default='New', string='Status', copy=False)
+         ('sold', 'Sold'), ('canceled', 'Canceled')], required=True, default='new', string='Status', copy=False)
     tag_ids = fields.Many2many('estate.property.tag', string='Tags')
     offer_ids = fields.One2many('estate.property.offer', 'property_id', string='Offers')
     total_area = fields.Float(string='Total Area (sqm)', compute='_compute_total_area',

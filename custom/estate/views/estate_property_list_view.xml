@@ -1,10 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+<!--    <record id="estate_property_view_dashboard" model="ir.ui.view">-->
+<!--        <field name="name">estate.property.dashboard</field>-->
+<!--        <field name="model">estate.property</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <dashboard>-->
+<!--                <group>-->
+<!--                    <view type="graph"/>-->
+<!--                    <group>-->
+<!--                        <aggregate name="min_expected_price" string="Min Expected Price" field="expected_price" group_operator="min"-->
+<!--                            help="Lowest expected price."/>-->
+<!--                        <aggregate name="max_expected_price" string="Max Expected Price" field="expected_price" group_operator="max"-->
+<!--                            help="Highest expected price."/>-->
+<!--                        <aggregate name="expected_price_avg" string="Total Expected Price" field="expected_price" group_operator="sum"-->
+<!--                            help="Average expected price of properties."/>-->
+<!--                        <aggregate name="living_area_avg" string="Avg Living Area" field="living_area" group_operator="avg"-->
+<!--                            help="Average living area of properties."/>-->
+<!--                    </group>-->
+<!--                    <group col="1">-->
+<!--                        <widget name="pie_chart" title="Property Types" attrs="{'groupby': 'type_id'}"/>-->
+<!--                        <widget name="pie_chart" title="Total Sales"-->
+<!--                            attrs="{'groupby': 'type_id',-->
+<!--                                    'measure': 'selling_price',-->
+<!--                                    'domain': '[(\'state\', \'=\', \'sold\')]'}"/>-->
+<!--                    </group>-->
+<!--                    <view type="pivot"/>-->
+<!--                </group>-->
+<!--            </dashboard>-->
+<!--        </field>-->
+<!--    </record>-->
     <record id="estate_property_view_kanban" model="ir.ui.view">
         <field name="name">estate.property.kanban</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="property_type_id" records_draggable="0">
+            <kanban default_group_by="type_id" records_draggable="0">
                 <field name="state"/>
                 <templates>
                     <t t-name="kanban-box">
@@ -17,7 +46,7 @@
                             <div>
                                 Expected Price: <field name="expected_price"/>
                             </div>
-                            <div t-if="record.status.raw_value == 'offer received'">
+                            <div t-if="record.state.raw_value == 'offer received'">
                                 Best Offer: <field name="best_offer"/>
                             </div>
                             <div t-if="record.selling_price.raw_value">

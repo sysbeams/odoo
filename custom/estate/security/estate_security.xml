@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="base.module_category_real_estate_brokerage" model="ir.module.category">
+        <field name="name">Estate Manangement</field>
+        <field name="description">Helps manages sales action on Estates</field>
+    </record>
     <record id="estate_group_user" model="res.groups">
         <field name="name">Agent</field>
-<!--        <field name="category_id" ref="base.module_category_real_estate_brokerage"/>-->
+        <field name="category_id" ref="base.module_category_real_estate_brokerage"/>
+<!--        <field name="implied_ids" eval="[(6, 0, [ref('base.group_private_addresses'), ref('base.group_user')])]"/>-->
     </record>
 
     <record id="estate_group_manager" model="res.groups">
         <field name="name">Manager</field>
-<!--        <field name="category_id" ref="base.module_category_real_estate_brokerage"/>-->
-<!--        <field name="implied_ids" eval="[(4,[ref('estate_group_user')])]"/>-->
+        <field name="category_id" ref="base.module_category_real_estate_brokerage"/>
+        <field name="implied_ids" eval="[(4, ref('estate_group_user'))]"/>
     </record>
+
+    <record id="estate_agent_rule" model="ir.rule">
+        <field name="name">Properties Rule</field>
+        <field name="model_id" ref="model_estate_property"/>
+<!--        <field name="perm_read" eval="True"/>-->
+        <field name="groups" eval="[Command.link(ref('estate_group_user'))]"/>
+        <field name="domain_force">[
+            '|', ('seller_id', '=', user.id),
+            ('seller_id', '=', False)
+            ]
+        </field>
+    </record>
+
+    <record id="estate_comp_rule" model="ir.rule">
+        <field name="name">Estate Account multi-company</field>
+        <field name="model_id" ref="model_estate_property"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+<!--    <record id="estate_manager_rule" model="ir.rule">-->
+<!--        <field name="name">Properties Rule</field>-->
+<!--        <field name="model_id" ref="model_estate_property"/>-->
+<!--        <field name="perm_read" eval="False"/>-->
+<!--        <field name="groups" eval="[Command.link(ref('estate_group_manager'))]"/>-->
+<!--        <field name="domain_force">[-->
+<!--            '|', ('seller_id', '=', user.id),-->
+<!--            ('seller_id', '=', False)-->
+<!--            ]-->
+<!--        </field>-->
+<!--    </record>-->
+
 
 </odoo>

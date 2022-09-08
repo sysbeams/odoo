@@ -1,4 +1,5 @@
 from odoo import models, Command
+from odoo.exceptions import AccessError
 
 
 class EstateProperty(models.Model):
@@ -6,9 +7,15 @@ class EstateProperty(models.Model):
 
     def action_sold(self):
         res = super().action_sold()
-        journal = self.env["account.journal"].search([("type", "=", "sale")], limit=1)
+        if not self.env['account.move'].check_access_rights('create', False):
+            try:
+                self.check_access_rights('write')
+                self.check_access_rule('write')
+            except AccessError:
+                return self.env['account.move']
+        journal = self.env["account.journal"].sudo().search([("type", "=", "sale")], limit=1)
         for prop in self:
-            self.env["account.move"].create(
+            self.env["account.move"].sudo().create(
                 {
                     "partner_id": prop.buyer_id.id,
                     "move_type": "out_invoice",
